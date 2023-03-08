@@ -1,18 +1,22 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useForm} from '@mantine/form'
 import {Button, Group, Modal, Textarea, TextInput} from "@mantine/core";
-import {ENDPOINT, Todo} from "../src/App";
-import {KeyedMutator} from "swr";
+import {ENDPOINT} from "../src/App";
+import AuthContext from "../context/AuthContext";
+
 
 
 
 function AddTodo({ setTodos, groupID }:  { setTodos:  React.Dispatch<React.SetStateAction<never[]>>, groupID: number }) {
     const [open, setOpen] = useState(false)
 
+    let { user }:any = useContext(AuthContext);
+    const userObj = JSON.parse(user)
+
     const form = useForm({
         initialValues:{
             text: '',
-            user_id: 1,
+            user_id: userObj?.ID,
             group_id: groupID,
         }
     })

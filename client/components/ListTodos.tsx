@@ -1,33 +1,49 @@
 import {ActionIcon, List, Text} from '@mantine/core'
-import  {KeyedMutator} from "swr"
-import { v4 as uuidv4 } from 'uuid';
 import {CheckCircleFillIcon, RepoDeletedIcon} from "@primer/octicons-react";
 import {ENDPOINT, Todo} from "../src/App";
 import AddTodo from "./AddTodo";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import AuthContext from "../context/AuthContext";
+import GroupTitle from "./GroupTitle";
 
 
-function ListTodos({groupID}:
+function ListTodos({groupID, group, deleteGroup}:
                        {
                            groupID: number,
+                           group:any,
+                           deleteGroup: any
                        }) {
+
+    let { user }:any = useContext(AuthContext);
+    const userObj = JSON.parse(user)
 
     const [todos, setTodos] = useState([]);
 
     useEffect(() => {
-        GetPostsFromGroup(groupID);
-    }, []);
+        if (userObj.ID !== null) {
+            GetPostsFromGroup(groupID, userObj.ID);
+        }
+
+    }, [group]);
 
 
-    async function GetPostsFromGroup(ID: number) {
+    async function GetPostsFromGroup(ID: number, userObjID: number) {
+
         const updated = await fetch(`${ENDPOINT}/group/posts`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({"ID": ID})
+            body: JSON.stringify({
+                "ID": ID,
+                "user_id": userObjID
+            })
         }).then(response => response.json())
-        await setTodos(updated)
+        if (updated !== null) {
+            await setTodos(updated)
+        }
+
+
     }
 
     async function markTodoAsDone(ID: number) {
@@ -48,11 +64,13 @@ function ListTodos({groupID}:
 
     return (
 
-            <List spacing="xs" size="sm" mb={2} center>
+            <List >
+                <GroupTitle group={group} deleteGroup={deleteGroup}/>
                 {todos?.map((todo:Todo) => {
 
-                    return <List.Item
-                        key={`todo_list__${uuidv4()}`}>
+
+                    return (<List.Item
+                        key={`todo_list__${todo.ID}`}>
 
                         <div style={{display: 'flex'}}>
                             <Text color="white">{todo.text}</Text>
@@ -74,7 +92,7 @@ function ListTodos({groupID}:
                             </ActionIcon>
 
                         </div>
-                    </List.Item>
+                    </List.Item>)
                 })}
                 <AddTodo setTodos={setTodos} groupID={groupID}/>
             </List>

@@ -15,12 +15,12 @@ func GroupIndex(c *gin.Context) {
 
 func GetPostsFromGroup(c *gin.Context) {
 	var body struct {
-		ID uint
+		ID     uint
+		UserID uint `json:"user_id"`
 	}
 	c.Bind(&body)
-
 	var posts []models.Todo
-	initializers.DB.Find(&posts, "group_id = ?", body.ID)
+	initializers.DB.Find(&posts, "group_id = ? AND user_id = ?", body.ID, body.UserID)
 	c.JSON(200, posts)
 }
 

@@ -25,7 +25,7 @@ func PostsCreate(c *gin.Context) {
 		return
 	}
 
-	initializers.DB.Find(&todos, "group_id = ?", body.GroupID)
+	initializers.DB.Find(&todos, "group_id = ? AND user_id = ?", body.GroupID, body.UserID)
 	c.JSON(200, todos)
 }
 
@@ -56,7 +56,7 @@ func PostsUpdate(c *gin.Context) {
 		Text: body.Text,
 	})
 
-	initializers.DB.Find(&todos, "group_id = ?", todo.GroupID)
+	initializers.DB.Find(&todos, "group_id = ? AND user_id = ?", todo.GroupID, todo.UserID)
 	c.JSON(200, todos)
 }
 
@@ -68,10 +68,10 @@ func PostsDelete(c *gin.Context) {
 	initializers.DB.Find(&todo, id)
 
 	groupID := todo.GroupID
-
+	userID := todo.UserID
 	initializers.DB.Delete(&todo, id)
 
-	initializers.DB.Find(&todos, "group_id = ?", groupID)
+	initializers.DB.Find(&todos, "group_id = ? AND user_id = ?", groupID, userID)
 
 	c.JSON(200, todos)
 }
@@ -83,6 +83,6 @@ func MarkTodoAsDone(c *gin.Context) {
 	initializers.DB.Model(&todo).Update("done", !todo.Done)
 	initializers.DB.Save(&todo)
 
-	initializers.DB.Find(&todos, "group_id = ?", todo.GroupID)
+	initializers.DB.Find(&todos, "group_id = ? AND user_id = ?", todo.GroupID, todo.UserID)
 	c.JSON(200, todos)
 }

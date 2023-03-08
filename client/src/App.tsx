@@ -3,7 +3,18 @@ import {Box} from '@mantine/core'
 import useSWR from "swr"
 import AddGroup from "../components/AddGroup";
 import ListGroups from "../components/ListGroups";
-import {useEffect, useState} from "react";
+import {ReactNode, useContext, useEffect, useState} from "react";
+import {
+    BrowserRouter as Router,
+    Route,
+    Routes
+} from "react-router-dom";
+import TodosPage from "../pages/TodosPage";
+import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/LoginPage";
+import Header from "../components/Header";
+import AuthContext, {AuthProvider} from "../context/AuthContext";
+
 
 export interface Todo {
     ID: number
@@ -23,46 +34,28 @@ export interface Groups {
 
 export const ENDPOINT = 'http://localhost:3000'
 
-const fetcher = (url: string, init?: RequestInit) => fetch(`${ENDPOINT}${url}`, init).then(response => response.json())
+// const fetcher = (url: string, init?: RequestInit) => fetch(`${ENDPOINT}${url}`, init).then(response => response.json())
+
 
 function App() {
 
   // const {data, mutate} = useSWR<Todo[]>('/posts',fetcher)
 
-    // const {data: groups, mutate: setGroups} = useSWR<Groups[]>('/groups', fetcher)
-    const [groups, setGroups] = useState([]);
-
-
-
-
-    useEffect(() => {
-        getGroups();
-    }, []);
-
-
-
-    async function getGroups() {
-        const updated = await fetch(`${ENDPOINT}/groups`, {
-            method: 'GET',
-        }).then(response => response.json())
-
-        await setGroups(updated)
-    }
-
 
     return (
-        <Box
-            sx={(theme) => ({
-                padding: '2rem',
-                width: '100%',
-                maxWidth: '40rem',
-                margin: '0 auto',
+        <Router>
+            <AuthProvider>
 
-            })}
-        >
-            <AddGroup setGroups={setGroups}/>
-            <ListGroups groups={groups} setGroups={setGroups} />
-        </Box>
+            <Header/>
+            <Routes>
+
+                <Route path="/" element={<TodosPage/>}/>
+
+                <Route path="/login/" element={<LoginPage/>}/>
+                <Route path="/register" element={<RegisterPage/>}/>
+            </Routes>
+            </AuthProvider>
+        </Router>
 
   )
 }

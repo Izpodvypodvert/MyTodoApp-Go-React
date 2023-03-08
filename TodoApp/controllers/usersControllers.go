@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -97,17 +98,15 @@ func Login(c *gin.Context) {
 	// send it back
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, ",", "", false, true)
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, user)
 }
 
 func Validate(c *gin.Context) {
 	user, _ := c.Get("user")
 
 	//user.(models.User).ID
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": user,
-	})
+	log.Println(user, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&!!!!!")
+	c.JSON(http.StatusOK, user)
 }
 
 func Logout(c *gin.Context) {

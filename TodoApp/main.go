@@ -23,7 +23,7 @@ func main() {
 	r.POST("/signUp", controllers.SignUp)
 	r.POST("/login", controllers.Login)
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
-	r.POST("/logout", controllers.Logout)
+	r.GET("/logout", controllers.Logout)
 
 	// TODO routes
 	r.POST("/posts", controllers.PostsCreate)
