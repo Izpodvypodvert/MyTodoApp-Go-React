@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: any) => {
         //     setUser(response)
 
 
-            window.location.href = "/";
+            window.location.href = "/login";
 
         // } else {
         //     alert(response.error);
@@ -76,12 +76,14 @@ export const AuthProvider = ({ children }: any) => {
 
 
 
+
+
     let contextData = {
         user,
         setUser,
         loginUser,
         SignUp,
-        logoutUser
+        logoutUser,
 
     };
 

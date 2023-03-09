@@ -1,0 +1,10 @@
+.header {
+  /* float: inline-end; */
+  text-align: right;
+  font-size: large;
+  margin-right: 1rem;
+}
+
+.header:hover {
+  color: aqua;
+}

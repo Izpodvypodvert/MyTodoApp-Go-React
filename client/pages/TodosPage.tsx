@@ -3,22 +3,32 @@ import AddGroup from "../components/AddGroup";
 import ListGroups from "../components/ListGroups";
 import App, {ENDPOINT} from "../src/App";
 import {useContext, useEffect, useState} from "react";
+import AuthContext from "../context/AuthContext";
 
 
 
 
 function TodosPage() {
 
-
+    let { user }:any = useContext(AuthContext);
+    const userObj = JSON.parse(user)
     const [groups, setGroups] = useState([]);
 
     useEffect(() => {
-        getGroups();
+        if (userObj.ID !== null) {
+            getGroups(userObj.ID);
+        }
     }, []);
 
-    async function getGroups() {
+    async function getGroups(userObjID: number) {
         const updated = await fetch(`${ENDPOINT}/groups`, {
-            method: 'GET',
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "user_id": userObjID
+            })
         }).then(response => response.json())
         await setGroups(updated)
     }
@@ -26,10 +36,10 @@ function TodosPage() {
     return (
         <Box
             sx={(theme) => ({
-                padding: '2rem',
-                width: '100%',
-                maxWidth: '75rem',
-                margin: '0 auto',
+                backgroundColor:  'dark',
+                textAlign: 'center',
+                padding: theme.spacing.xl,
+                borderRadius: theme.radius.md,
 
             })}
         >

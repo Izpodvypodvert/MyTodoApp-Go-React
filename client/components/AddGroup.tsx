@@ -1,18 +1,21 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useForm} from '@mantine/form'
 import {Button, Modal, Group, TextInput} from "@mantine/core";
 import {ENDPOINT} from "../src/App";
+import AuthContext from "../context/AuthContext";
 
 
 
 
 function AddGroup({ setGroups }:  { setGroups: React.Dispatch<React.SetStateAction<never[]>> }) {
     const [open, setOpen] = useState(false)
+    let { user }:any = useContext(AuthContext);
+    const userObj = JSON.parse(user)
 
     const formGroups = useForm({
         initialValues:{
             Title: '111',
-            user_id: 1,
+            user_id: userObj?.ID,
         }
     })
 

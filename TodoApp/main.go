@@ -34,10 +34,11 @@ func main() {
 	r.PATCH("/posts/:id/done", controllers.MarkTodoAsDone)
 
 	// Groups routes
-	r.GET("/groups", controllers.GroupIndex)
+	//r.GET("/groups", controllers.GroupIndex)
 	r.POST("/group/create", controllers.GroupCreate)
 	r.DELETE("/group/delete/:id", controllers.GroupDelete)
 	r.PUT("/group/posts", controllers.GetPostsFromGroup)
+	r.PUT("/groups", controllers.GetGroups)
 
 	r.Run()
 }

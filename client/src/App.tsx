@@ -1,9 +1,4 @@
 import './App.css'
-import {Box} from '@mantine/core'
-import useSWR from "swr"
-import AddGroup from "../components/AddGroup";
-import ListGroups from "../components/ListGroups";
-import {ReactNode, useContext, useEffect, useState} from "react";
 import {
     BrowserRouter as Router,
     Route,
@@ -61,18 +56,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-// <Grid container spacing={2} minHeight={160}>
-//     {[...Array(5)].map((_, i) =>
-//     <Grid xs key={i + "__Grid"} item={true} display="flex" justifyContent="center" alignItems="center">
-//         <Container key={i + "__Container"}>
-//             <ListTodos mutate={mutate} data={data} key={i + "__ListTodos"}/>
-//
-//             <AddTodo mutate={mutate} key={i + "__AddTodo"}/>
-//         </Container>
-//     </Grid>
-// )}
-// </Grid>

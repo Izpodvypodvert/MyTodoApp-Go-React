@@ -24,11 +24,21 @@ func GetPostsFromGroup(c *gin.Context) {
 	c.JSON(200, posts)
 }
 
+func GetGroups(c *gin.Context) {
+	var body struct {
+		UserID uint `json:"user_id"`
+	}
+	c.Bind(&body)
+	var groups []models.Group
+	initializers.DB.Find(&groups, "user_id = ?", body.UserID)
+	c.JSON(200, groups)
+}
+
 func GroupCreate(c *gin.Context) {
 
 	var body struct {
 		Title  string
-		UserID uint
+		UserID uint `json:"user_id"`
 	}
 	c.Bind(&body)
 	group := models.Group{Title: body.Title, UserID: body.UserID}
@@ -39,7 +49,7 @@ func GroupCreate(c *gin.Context) {
 		return
 	}
 
-	initializers.DB.Find(&groups)
+	initializers.DB.Find(&groups, "user_id = ?", body.UserID)
 	c.JSON(200, groups)
 }
 
@@ -47,7 +57,8 @@ func GroupDelete(c *gin.Context) {
 	id := c.Param("id")
 
 	var group models.Group
+	UserID := group.UserID
 	initializers.DB.Delete(&group, id)
-	initializers.DB.Find(&groups)
+	initializers.DB.Find(&groups, "user_id = ?", UserID)
 	c.JSON(200, groups)
 }

@@ -24,7 +24,7 @@ function ListGroups({
 
     return (
 
-        <Grid container spacing={2} minHeight={160}>
+        <Grid container spacing={10} minHeight={300}>
             {groups?.map((group: Groups) => {
 
 
